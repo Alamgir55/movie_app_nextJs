@@ -6,10 +6,25 @@ import MovieList from '../components/movieList'
 import Footer from '../components/footer'
 
 
-import { getMovies } from '../actions'
+import { getMovies, getCategories } from '../actions'
 
 const Home = (props) => {
- const {images} = props;
+ const {images, categories, movies} = props;
+ const [filter, setFilter] = useState('all');
+
+ const changeCategory = category => {
+  setFilter(category)
+}
+
+const filterMovies = movies => {
+  if(filter === 'all'){
+    return movies;
+  }
+  return movies.filter((m) => {
+    return m.genre && m.genre.includes(filter)
+  })
+}
+
   return (
     <div>
       <div className="home-page">
@@ -17,13 +32,17 @@ const Home = (props) => {
           <div className="row">
             <div className="col-lg-3">
               <SideMenu
+                changeCategory={changeCategory}
+                activeCategory={filter}
+                categories={categories}
                 appName={"Movie DB"}
               />
             </div>
             <div className="col-lg-9">
               <Carousel images={images} />
+              <h1>Displaying {filter} movies</h1>
               <div className="row">
-                <MovieList movies={props.movies || []} />
+                <MovieList movies={filterMovies(movies) || []} />
               </div>
             </div>
           </div>
@@ -35,15 +54,18 @@ const Home = (props) => {
 }
 Home.getInitialProps = async () => {
   const movies = await getMovies();
+  const categories = await getCategories();
   const images = movies.map((movie) => {
     return {
       id: `image-${movie.id}`,
-      image: movie.image
+      url: movie.cover,
+      name: movie.name
     }
   })
     return {
       movies,
-      images
+      images,
+      categories
     }
 }
 

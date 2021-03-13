@@ -2,6 +2,7 @@ import App from 'next/app'
 import Head from 'next/head'
 import Navbar from '../components/navbar'
 
+
 class MovieApp extends App {
 
   // This getInitialProps get home {getInitialProps} movie data

@@ -26,6 +26,7 @@ class MovieList extends React.Component {
                   <a href="#">{movie.name}</a>
                 </Link>
               </h4>
+              <div>{movie.genre}</div>
               <p className="card-text">{this.shorten(movie.description, 100)}</p>
             </div>
             <div className="card-footer">
